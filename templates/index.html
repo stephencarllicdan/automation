@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NEXUS | Network Operations Center</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<!-- TOP NAVIGATION -->
+<nav class="topbar">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-network-wired"></i></div>
+        <div>
+            <h2>NEXUS<span>.</span></h2>
+            <small>NETWORK OPERATIONS CENTER</small>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="/" class="nav-link active">Overview</a>
+        <a href="#router-info" class="nav-link">Device</a>
+        <a href="#interfaces" class="nav-link">Interfaces</a>
+        <a href="#configuration" class="nav-link">Execution</a>
+        <a href="#commands" class="nav-link">Console</a>
+    </div>
+
+    <div class="nav-user">
+        <div class="user-avatar">A</div>
+        <div>
+            <strong>Administrator</strong>
+            <small>System Operator</small>
+        </div>
+    </div>
+</nav>
+
+
+<main class="dashboard">
+
+    <!-- PAGE INTRO -->
+    <section class="page-intro">
+        <div>
+            <div class="breadcrumb">NETWORK / OVERVIEW</div>
+            <h1>Infrastructure Overview</h1>
+            <p>Centralized monitoring and command execution for your Cisco device.</p>
+        </div>
+
+        <div class="system-label">
+            <span class="live-indicator"></span>
+            NETWORK MANAGEMENT
+        </div>
+    </section>
+
+
+    <!-- MAIN GRID -->
+    <section class="overview-grid" id="router-info">
+
+        <!-- ROUTER DEVICE PANEL -->
+        <div class="device-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <span class="eyebrow">PRIMARY DEVICE</span>
+                    <h2>Router Overview</h2>
+                </div>
+                <span class="device-type">CISCO IOS</span>
+            </div>
+
+            <div class="router-visual">
+                <div class="router-circle">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="router-line"></div>
+                <div class="router-status">
+                    <span class="status-light"></span>
+                    {% if error %}
+                        CONNECTION FAILED
+                    {% elif results %}
+                        COMMANDS RETRIEVED
+                    {% else %}
+                        AWAITING EXECUTION
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="device-details">
+                <div class="detail-row">
+                    <span>Device Address</span>
+                    <strong>192.168.10.109</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Connection Port</span>
+                    <strong>32770 / Telnet</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Device Platform</span>
+                    <strong>Cisco IOS Router</strong>
+                </div>
+
+                <div class="detail-row">
+                    <span>Management</span>
+                    <strong>Netmiko / Python</strong>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="right-overview">
+
+            <!-- CONNECTION STATUS -->
+            <div class="connection-panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow">DEVICE CONNECTIVITY</span>
+                        <h2>Connection Status</h2>
+                    </div>
+                    <i class="fas fa-signal heading-icon"></i>
+                </div>
+
+                <div class="connection-main">
+
+                    <div class="connection-indicator">
+                        <span class="big-dot"></span>
+                    </div>
+
+                    <div>
+                        <h3 class="{% if error %}failed{% elif results %}success{% else %}waiting{% endif %}">
+                            {% if error %}
+                                Failed
+                            {% elif results %}
+                                Connected
+                            {% else %}
+                                Waiting
+                            {% endif %}
+                        </h3>
+
+                        <p>
+                            {% if error %}
+                                Unable to retrieve router information.
+                            {% elif results %}
+                                Command execution returned results.
+                            {% else %}
+                                Execute commands to retrieve device information.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="connection-footer">
+                    <span>Target IP</span>
+                    <strong>192.168.10.109</strong>
+                </div>
+            </div>
+
+
+            <!-- EXECUTION SUMMARY -->
+            <div class="summary-panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="eyebrow">EXECUTION SUMMARY</span>
+                        <h2>Command Activity</h2>
+                    </div>
+                    <i class="fas fa-terminal heading-icon"></i>
+                </div>
+
+                <div class="summary-number">{{ results|length }}</div>
+                <p class="summary-description">Command results retrieved</p>
+
+                <div class="summary-footer">
+                    <span>RESULT COLLECTION</span>
+                    <span class="summary-mark">NEXUS / CLI</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- INTERFACE SECTION -->
+    <section class="section-block" id="interfaces">
+
+        <div class="section-title">
+            <div>
+                <span class="eyebrow">NETWORK COMPONENTS</span>
+                <h2>Interface Monitoring</h2>
+                <p>Router management information and connection endpoint.</p>
+            </div>
+            <span class="section-index">01 / DEVICE</span>
+        </div>
+
+        <div class="interface-grid">
+
+            <div class="interface-card">
+                <div class="interface-icon">
+                    <i class="fas fa-ethernet"></i>
+                </div>
+                <div>
+                    <small>DEVICE ADDRESS</small>
+                    <h3>192.168.10.109</h3>
+                    <p>Management endpoint</p>
+                </div>
+                <span class="interface-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+            </div>
+
+            <div class="interface-card">
+                <div class="interface-icon">
+                    <i class="fas fa-plug"></i>
+                </div>
+                <div>
+                    <small>REMOTE ACCESS</small>
+                    <h3>Port 32770</h3>
+                    <p>Telnet connection</p>
+                </div>
+                <span class="interface-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+            </div>
+
+            <div class="interface-card">
+                <div class="interface-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div>
+                    <small>COMMAND ENGINE</small>
+                    <h3>Netmiko</h3>
+                    <p>Python automation</p>
+                </div>
+                <span class="interface-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- CONFIGURATION / EXECUTION -->
+    <section class="execution-section" id="configuration">
+
+        <div class="execution-description">
+            <span class="eyebrow">REMOTE DEVICE MANAGEMENT</span>
+            <h2>Command Center</h2>
+            <p>
+                Retrieve router configuration and operational
+                information using automated Cisco IOS commands.
+            </p>
+
+            <div class="execution-note">
+                <i class="fas fa-shield-halved"></i>
+                Authorized device management
+            </div>
+        </div>
+
+        <div class="execution-control">
+            <div class="control-top">
+                <i class="fas fa-terminal"></i>
+                <span>CLI EXECUTION</span>
+            </div>
+
+            <form method="POST">
+                <button type="submit" class="execute-btn">
+                    <i class="fas fa-play"></i>
+                    Execute Commands
+                    <i class="fas fa-arrow-right button-arrow"></i>
+                </button>
+            </form>
+
+            <small>Execute the configured router commands.</small>
+        </div>
+
+    </section>
+
+
+    <!-- ERROR -->
+    {% if error %}
+    <section class="error-box">
+        <div class="error-icon">
+            <i class="fas fa-triangle-exclamation"></i>
+        </div>
+
+        <div>
+            <strong>Router Connection Error</strong>
+            <p>{{ error }}</p>
+        </div>
+    </section>
+    {% endif %}
+
+
+    <!-- COMMAND OUTPUTS -->
+    <section class="console-section" id="commands">
+
+        <div class="section-title">
+            <div>
+                <span class="eyebrow">TERMINAL ENVIRONMENT</span>
+                <h2>Command Console</h2>
+                <p>Output returned by the Cisco router.</p>
+            </div>
+
+            <span class="console-count">{{ results|length }} OUTPUTS</span>
+        </div>
+
+
+        {% if results %}
+
+            {% for command, output in results.items() %}
+
+            <div class="console-card">
+
+                <div class="console-header">
+                    <div class="console-window">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <strong>{{ command }}</strong>
+
+                    <small>EXECUTED COMMAND</small>
+                </div>
+
+                <div class="console-body">
+                    <div class="console-prompt">NEXUS@ROUTER:~$ {{ command }}</div>
+                    <pre>{{ output }}</pre>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="console-empty">
+                <div class="empty-symbol">
+                    <i class="fas fa-code"></i>
+                </div>
+
+                <h3>Console is awaiting input</h3>
+
+                <p>
+                    No command output available.
+                    Use the Command Center to retrieve router information.
+                </p>
+
+                <a href="#configuration">
+                    <i class="fas fa-terminal"></i>
+                    Open Command Center
+                </a>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-brand">
+            <i class="fas fa-network-wired"></i>
+            NEXUS NETWORK OPERATIONS
+        </div>
+
+        <p>Powered by Python, Flask and Netmiko</p>
+        <small>Network Management Interface</small>
+    </footer>
+
+</main>
+
+</body>
+</html>
